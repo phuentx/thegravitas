@@ -1,1 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GraVitas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="icon" href="https://cdn.glitch.global/9af78ba3-e788-47b8-b995-273533c7d730/TheGravitas-LOGO.png?v=1750689201359" type="image/png" sizes="64x64" />
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-container">
+    <!-- Left Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-content">
+        <div class="nav-items">
+          <div class="nav-item active" onclick="loadContent('home', this)"><i class="bi bi-house-door-fill"></i> <span>Home</span></div>
+          <div class="nav-item" onclick="loadContent('explore', this)"><i class="bi bi-search"></i> <span>Explore</span></div>
+          <div class="nav-item" onclick="loadContent('friends', this)"><i class="bi bi-person-fill-add"></i> <span>Friends</span></div>
+          <div class="nav-item" onclick="loadContent('people', this)"><i class="bi bi-people-fill"></i> <span>Following</span></div>
+          <div class="nav-item" onclick="loadContent('profile', this)"><i class="bi bi-person-circle"></i> <span>Profile</span></div>
+          <div class="nav-item" onclick="loadContent('liked', this)"><i class="bi bi-heart-fill"></i> <span>Interest</span></div>
+          <div class="nav-item" onclick="loadContent('more', this)"><i class="bi bi-grid-1x2-fill"></i> <span>More</span></div>
+          <button class="spost-button" onclick="openTweetModal()">
+            <i class="bi bi-plus-circle"></i> <span>Create Post</span>
+          </button>
+        </div>
+      </div>
+      <div class="user-profile" onclick="toggleUserMenu()">
+        <img src="" alt="User Profile" id="profile-img" />
+        <span id="username-text"></span>
+        <div id="userMenu" class="user-menu">
+          <button onclick="logout()"><i class="bi bi-box-arrow-right"></i> Logout</button>
+        </div>
+      </div>
+    </div>
 
+    <!-- Header -->
+    <header class="main-header">
+      <div class="header-content">
+        <div class="header-logo">
+          <a href="home.html">
+            <img src="https://cdn.glitch.global/9af78ba3-e788-47b8-b995-273533c7d730/The%20Gravitas-logo.png?v=1750587746148" alt="GraVitas Logo" />
+          </a>
+        </div>
+        <div class="header-search-container">
+          <i class="bi bi-search search-icon"></i>
+          <input type="text" class="header-search" placeholder="Search GraVitas" />
+        </div>
+        <div class="header-nav">
+          <div class="notification-container">
+            <button class="notification-icon-btn" onclick="toggleNotificationDropdown()" aria-label="Notifications">
+              <i class="bi bi-bell-fill"></i>
+              <span id="notification-count" class="notification-count" style="display: none;"></span>
+            </button>
+            <div id="notification-dropdown" class="notification-dropdown" style="display: none;">
+              <div class="notification-dropdown-content">
+                <div class="notification-header">
+                  <h2>Notifications</h2>
+                  <button class="action-button delete-all-notifications" onclick="deleteAllNotifications()" aria-label="Delete all notifications" style="display: none;">
+                    <i class="bi bi-trash"></i> Delete All
+                  </button>
+                </div>
+                <div class="notification-tabs">
+                  <div class="notification-tab active" data-tab="friends">Friends</div>
+                  <div class="notification-tab" data-tab="non-friends">Non-Friends</div>
+                  <div class="notification-tab" data-tab="official">Official</div>
+                </div>
+                <div id="notification-content"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Middle Content -->
+    <div class="middle">
+      <div class="content-scroll">
+        <div id="feeds" class="content-section">
+          <div id="posts"></div>
+        </div>
+        <div id="external-content" class="content-section" style="display: none;"></div>
+      </div>
+    </div>
+ <!-- Right Sidebar -->
+<div class="right-sidebar">
+  <div class="sidebar-content">
+    <div class="trending-section">
+      <h3>Trending</h3>
+      <div id="trending-tags" class="trending-tags"></div>
+      <div id="trending-users" class="trending-users"></div>
+    </div>
+  </div>
+</div>
+
+    <!-- Mobile Footer -->
+    <div class="mobile-footer">
+      <div class="footer-nav-item" onclick="loadContent('home', this)">
+        <i class="bi bi-house-door-fill"></i>
+      </div>
+      <div class="footer-nav-item" onclick="loadContent('explore', this)">
+        <i class="bi bi-search"></i>
+      </div>
+      <div class="footer-nav-item" onclick="openTweetModal()">
+        <i class="bi bi-plus-circle"></i>
+      </div>
+      <div class="footer-nav-item" onclick="loadContent('profile', this)">
+        <i class="bi bi-person-circle"></i>
+      </div>
+      <div class="footer-nav-item" onclick="toggleMobileMenu()">
+        <i class="bi bi-list"></i>
+      </div>
+    </div>
+
+   <!-- Mobile Menu Modal -->
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-menu-content">
+    <button class="mobile-menu-close" onclick="toggleMobileMenu()">
+      <i class="bi bi-x"></i>
+    </button>
+    <div class="mobile-nav-item" onclick="loadContent('friends', this); toggleMobileMenu()">
+      <i class="bi bi-person-fill-add"></i> Friends
+    </div>
+    <div class="mobile-nav-item" onclick="loadContent('people', this); toggleMobileMenu()">
+      <i class="bi bi-people-fill"></i> Following
+    </div>
+    <div class="mobile-nav-item" onclick="loadContent('explore', this); toggleMobileMenu()">
+      <i class="bi bi-globe-americas"></i> Explore
+    </div>
+    <div class="mobile-nav-item" onclick="loadContent('about', this); toggleMobileMenu()">
+      <i class="bi bi-chat-text-fill"></i> About
+    </div>
+    <div class="mobile-nav-item" onclick="loadContent('liked', this); toggleMobileMenu()">
+      <i class="bi bi-heart-fill"></i> Liked Posts
+    </div>
+    <div class="mobile-nav-item" onclick="toggleChatbot(); toggleMobileMenu()">
+      <i class="bi bi-robot"></i> Newton
+    </div>
+    <div class="mobile-nav-item" onclick="loadContent('more', this); toggleMobileMenu()">
+      <i class="bi bi-grid-1x2-fill"></i> More
+    </div>
+    <div class="mobile-nav-item" onclick="logout(); toggleMobileMenu()">
+      <i class="bi bi-box-arrow-right"></i> Logout
+    </div>
+  </div>
+</div>
+
+    <!-- Post Modal -->
+    <div class="post-overlay" id="post-overlay" onclick="closeTweetModal(event)">
+      <form id="postForm" onclick="event.stopPropagation()">
+        <button class="post-modal-close" onclick="closeTweetModal()" aria-label="Close post form">
+          <i class="bi bi-x"></i>
+        </button>
+        <h5 style="font-size: 16px; font-weight: 700; color: #262626; margin-bottom: 16px;">Create Post</h5>
+        <div class="mb-3">
+          <textarea id="caption" class="form-control" placeholder="What's your thought?" required></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="tag-select" class="form-label">Add Tag</label>
+          <select id="tag-select" class="form-select" onchange="toggleCustomTagInput()">
+            <option value="">Select a tag...</option>
+            <option value="social">Social</option>
+            <option value="arts">Arts</option>
+            <option value="anime">Anime</option>
+            <option value="food">Food</option>
+            <option value="blog">Blog</option>
+            <option value="tech">Tech</option>
+            <option value="nature">Nature</option>
+            <option value="animal">Animal</option>
+            <option value="car">Car</option>
+            <option value="nature-retreat">Nature Retreat</option>
+            <option value="le">LE</option>
+            <option value="future">Future</option>
+            <option value="wildlife">Wildlife</option>
+            <option value="custom">Custom</option>
+          </select>
+          <input type="text" id="custom-tag" class="form-control custom-tag-input" placeholder="Enter custom tag" maxlength="20">
+        </div>
+        <div class="mb-3">
+          <label for="media-upload" class="file-input-label">
+            <i class="bi bi-image"></i> Add Image
+          </label>
+          <input type="file" id="media-upload" accept="image/*" />
+          <img id="image-preview" class="media-preview" alt="Image Preview" />
+        </div>
+        <button class="btn btn-primary w-100" type="submit">Post</button>
+      </form>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="edit-profile-overlay" class="edit-profile-overlay">
+      <div class="edit-profile-modal">
+        <div class="edit-profile-modal-header">
+          <h5>Edit Profile</h5>
+          <button class="edit-profile-modal-close" aria-label="Close edit profile modal">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        <form id="editProfileForm" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="bio-input">Bio</label>
+            <textarea id="bio-input" class="form-control" placeholder="Tell us about yourself" maxlength="160"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="jobs-input">Jobs</label>
+            <input id="jobs-input" class="form-control" placeholder="Your profession" />
+          </div>
+          <div class="form-group">
+            <label for="education-input">Education</label>
+            <input id="education-input" class="form-control" placeholder="Your education" />
+          </div>
+          <div class="form-group">
+            <label for="dob-input">Date of Birth</label>
+            <input id="dob-input" type="date" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="hobbies-input">Hobbies</label>
+            <input id="hobbies-input" class="form-control" placeholder="Your hobbies" />
+          </div>
+          <div class="form-group">
+            <label for="banner-upload">Profile Banner</label>
+            <input type="file" id="banner-upload" accept="image/*" class="form-control" aria-label="Upload profile banner" />
+            <div class="image-preview-container">
+              <img id="banner-preview" alt="Banner preview" style="display: none; max-width: 100%; border-radius: 8px;" />
+              <button type="button" id="remove-banner-btn" class="remove-image-btn" style="display: none;" aria-label="Remove banner">✕</button>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+      </div>
+    </div>
+</div>
+<!-- Chatbot Button -->
+<button class="chatbot-button" onclick="toggleChatbot()" aria-label="Open chatbot">
+  <img src="https://cdn.glitch.global/9af78ba3-e788-47b8-b995-273533c7d730/newton?v=1751723115085" alt="" class="chatbot-icon-img">
+</button>
+
+<!-- Chatbot Container -->
+<div class="chatbot-container" id="chatbot-container" style="display: none;">
+  <div class="chatbot-header">
+    <div class="chatbot-title">
+      <img src="https://cdn.glitch.global/9af78ba3-e788-47b8-b995-273533c7d730/newton?v=1751723115085" alt="" class="chatbot-header-img">
+      <h5>Newton</h5>
+    </div>
+    <button class="chatbot-close" onclick="closeChatbot()" aria-label="Close chatbot">
+      <i class="bi bi-x"></i>
+    </button>
+  </div>
+  <div class="chatbot-messages" id="chatbot-messages">
+    <!-- Messages will be added dynamically by JavaScript -->
+  </div>
+  <div class="chatbot-input-container">
+    <button class="chatbot-image-icon" onclick="document.getElementById('chatbot-image-upload').click()" aria-label="Upload image for post">
+      <i class="bi bi-image"></i>
+    </button>
+    <input type="file" id="chatbot-image-upload" accept="image/*" style="display: none;" aria-label="Upload image for post">
+    <button class="chatbot-cancel-image" onclick="cancelImageUpload()" style="display: none;" aria-label="Cancel image upload">
+      <i class="bi bi-x-circle"></i>
+    </button>
+    <input type="text" id="chatbot-input" class="form-control" placeholder="Type your message..." aria-label="Chatbot input" />
+    <button class="send-icon" id="chatbot-submit-btn" aria-label="Send message">
+      <i class="bi bi-send-fill"></i>
+    </button>
+  </div>
+</div>
+
+<!-- Full-Screen Image Viewer -->
+<div class="image-viewer" id="image-viewer" style="display: none;">
+  <button class="image-viewer-close" onclick="closeImageViewer()" aria-label="Close image viewer">
+    <i class="bi bi-x"></i>
+  </button>
+  <img id="image-viewer-img" src="" alt="Full-screen image" />
+</div>
+<!-- Comment Modal (unchanged) -->
+<div class="comment-overlay" id="comment-overlay" onclick="closeCommentModal(event)">
+  <div class="comment-modal" onclick="event.stopPropagation()">
+    <div class="comment-modal-header">
+      <h5>Comments</h5>
+      <button class="comment-modal-close" onclick="closeCommentModal()" aria-label="Close comment">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+    <div class="comment-sort-buttons">
+      <button class="sort-button active" onclick="sortComments('newest')" aria-label="Sort by newest comments">Newest</button>
+      <button class="sort-button" onclick="sortComments('top')" aria-label="Sort by top comments">Top</button>
+      <button class="sort-button" onclick="sortComments('verified')" aria-label="Sort by verified users">Verified</button>
+      <button class="sort-button" onclick="sortComments('officials')" aria-label="Sort by official users">Officials</button>
+    </div>
+    <div class="comments-container" id="comment-list"></div>
+    <div class="comment-input-container" id="comment-input-container">
+      <input type="text" id="comment-input-modal" class="form-control comment-input" placeholder="Add a comment..." />
+      <button class="send-icon" id="comment-submit-btn" aria-label="Send comment">
+        <i class="bi bi-chat-dots-fill"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Relate Modal -->
+<div class="relate-overlay" id="relate-overlay" onclick="closeRelateModal(event)">
+  <div class="relate-modal" onclick="event.stopPropagation()">
+    <div class="relate-modal-header">
+      <h5>Related Posts</h5>
+      <button class="relate-modal-close" onclick="closeRelateModal()" aria-label="Close relate modal">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+    <div class="relate-sort-buttons">
+      <button class="sort-button active" onclick="sortRelates('newest')" aria-label="Sort by newest relates">Newest</button>
+      <button class="sort-button" onclick="sortRelates('top')" aria-label="Sort by top relates">Top</button>
+      <button class="sort-button" onclick="sortRelates('verified')" aria-label="Sort by verified users">Verified</button>
+      <button class="sort-button" onclick="sortRelates('officials')" aria-label="Sort by official users">Officials</button>
+    </div>
+    <div class="relates-container" id="relate-list"></div>
+    <div class="relate-input-container" id="relate-input-container">
+      <input type="text" id="relate-input-modal" class="form-control relate-input" placeholder="Add a caption..." maxlength="280" aria-label="Add a caption for related post" />
+      <label for="relate-image-upload" class="relate-image-upload" aria-label="Upload image">
+        <i class="bi bi-camera"></i>
+        <input type="file" id="relate-image-upload" accept="image/*" style="display: none;" />
+      </label>
+      <button class="send-icon" id="relate-submit-btn" aria-label="Submit related post">
+        <i class="bi bi-upload"></i>
+      </button>
+    </div>
+  </div>
+</div>
+  <script src="script.js"></script>
+</body>
+</html>
